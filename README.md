@@ -3,8 +3,8 @@
 ## TODO
 
 - [x] Make it deploy
-- [ ] Scaffold basic UI with mock data
-- [ ] Setup DB (vercel postgres)
+- [x] Scaffold basic UI with mock data
+- [x] Setup DB (vercel postgres)
 - [ ] Add authentication
 - [ ] Add expense creation
 - [ ] Error management (sentry)

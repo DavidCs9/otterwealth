@@ -8,37 +8,11 @@
 //   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 // );
 
-const mockExpenses = [
-  {
-    id: 1,
-    user_id: 1,
-    category_id: 1,
-    amount: 100,
-    description: "Lunch",
-    expense_date: "2021-08-01",
-    created_at: "2021-08-01T10:00:00",
-  },
-  {
-    id: 2,
-    user_id: 1,
-    category_id: 2,
-    amount: 50,
-    description: "Dinner",
-    expense_date: "2021-08-01",
-    created_at: "2021-08-01T20:00:00",
-  },
-  {
-    id: 3,
-    user_id: 1,
-    category_id: 3,
-    amount: 20,
-    description: "Breakfast",
-    expense_date: "2021-08-02",
-    created_at: "2021-08-02T08:00:00",
-  },
-];
+import { db } from "~/server/db";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const expenses = await db.query.expenses.findMany();
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
       <h1 className="text-4xl font-bold">Expenses</h1>
@@ -51,11 +25,11 @@ export default function HomePage() {
           </tr>
         </thead>
         <tbody>
-          {mockExpenses.map((expense) => (
-            <tr key={expense.id}>
-              <td className="px-4 py-2">{expense.expense_date}</td>
+          {[...expenses, ...expenses, ...expenses].map((expense) => (
+            <tr key={expense.id} className="text-center">
+              <td className="px-4 py-2">{expense.expenseDate}</td>
               <td className="px-4 py-2">{expense.description}</td>
-              <td className="px-4 py-2">{expense.amount}</td>
+              <td className="px-4 py-2">{expense.amount} $</td>
             </tr>
           ))}
         </tbody>
