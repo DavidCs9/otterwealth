@@ -1,15 +1,6 @@
-// CREATE TABLE Expenses (
-//   id SERIAL PRIMARY KEY,
-//   user_id INT REFERENCES Users(id),
-//   category_id INT REFERENCES Categories(id),
-//   amount DECIMAL(10, 2) NOT NULL,
-//   description TEXT,
-//   expense_date DATE NOT NULL,
-//   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-// );
-
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { db } from "~/server/db";
+import UploadExpenseButton from "./_components/UploadExpenseButton";
 
 export default async function HomePage() {
   const expenses = await db.query.expenses.findMany();
@@ -27,6 +18,7 @@ export default async function HomePage() {
       </SignedOut>
       <SignedIn>
         <h1 className="text-4xl font-bold">Expenses</h1>
+        <UploadExpenseButton />
         <table className="w-full table-auto">
           <thead>
             <tr>
@@ -36,7 +28,7 @@ export default async function HomePage() {
             </tr>
           </thead>
           <tbody>
-            {[...expenses, ...expenses, ...expenses].map((expense) => (
+            {expenses.map((expense) => (
               <tr key={expense.id} className="text-center">
                 <td className="px-4 py-2">{expense.expenseDate}</td>
                 <td className="px-4 py-2">{expense.description}</td>
