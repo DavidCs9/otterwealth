@@ -6,8 +6,11 @@
 - [x] Scaffold basic UI with mock data
 - [x] Setup DB (vercel postgres)
 - [x] Add authentication
-- [ ] Add expense creation
+- [x] Add expense creation with mock data
 - [ ] Error management (sentry)
-- [ ] Delete expense (server actions)
 - [ ] Analytics (posthog)
 - [ ] Ratelimiting (upstash)
+- [ ] Add expense form
+- [ ] Upload UI when adding expense
+- [ ] Separate list from form
+- [ ] Delete expense (server actions)
