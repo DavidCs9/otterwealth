@@ -7,7 +7,7 @@
 - [x] Setup DB (vercel postgres)
 - [x] Add authentication
 - [x] Add expense creation with mock data
-- [ ] Error management (sentry)
+- [x] Error management (sentry)
 - [ ] Analytics (posthog)
 - [ ] Ratelimiting (upstash)
 - [ ] Add expense form

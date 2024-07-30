@@ -59,7 +59,7 @@ export const expenses = createTable(
   "expense",
   {
     id: serial("id").primaryKey(),
-    // userId: integer("user_id").references(() => users.id),
+    userId: integer("user_id"),
     // categoryId: integer("category_id").references(() => categories.id),
     amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
     description: varchar("description").notNull(),

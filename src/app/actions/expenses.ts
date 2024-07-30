@@ -1,7 +1,13 @@
-"use server";
+import "server-only";
+
 import { auth } from "@clerk/nextjs/server";
 import { db } from "~/server/db";
 import { expenses } from "~/server/db/schema";
+
+export async function getExpenses() {
+  const expenses = await db.query.expenses.findMany();
+  return expenses;
+}
 
 export async function createExpense() {
   try {

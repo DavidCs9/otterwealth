@@ -1,43 +1,84 @@
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
-import { db } from "~/server/db";
-import UploadExpenseButton from "./_components/UploadExpenseButton";
+"use client";
 
-export default async function HomePage() {
-  const expenses = await db.query.expenses.findMany();
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  FormDescription,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
+import { Button } from "~/components/ui/button";
+import { useUser } from "@clerk/nextjs";
 
+const formSchema = z.object({
+  amount: z.number(),
+  description: z.string(),
+  expenseDate: z.date(),
+});
+
+export default function HomePage() {
+  const user = useUser();
+
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      amount: 0,
+      description: "",
+      expenseDate: new Date(),
+    },
+  });
+
+  // 2. Define a submit handler.
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(user);
+    const newExpense = {
+      amount: values.amount,
+      description: values.description,
+      expenseDate: new Date(),
+    };
+    console.log(newExpense);
+  }
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <SignedOut>
-        <div className="text-gray-400">
-          Pleased{" "}
-          <label className="text-white">
-            <SignInButton />
-          </label>{" "}
-          to see your expenses
-        </div>
-      </SignedOut>
-      <SignedIn>
-        <h1 className="text-4xl font-bold">Expenses</h1>
-        <UploadExpenseButton />
-        <table className="w-full table-auto">
-          <thead>
-            <tr>
-              <th className="px-4 py-2">Date</th>
-              <th className="px-4 py-2">Description</th>
-              <th className="px-4 py-2">Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            {expenses.map((expense) => (
-              <tr key={expense.id} className="text-center">
-                <td className="px-4 py-2">{expense.expenseDate}</td>
-                <td className="px-4 py-2">{expense.description}</td>
-                <td className="px-4 py-2">{expense.amount} $</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </SignedIn>
-    </main>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 px-4">
+        <FormField
+          control={form.control}
+          name="amount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Amount</FormLabel>
+              <FormControl>
+                <Input type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Input placeholder="Netflix subscription" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
   );
 }
